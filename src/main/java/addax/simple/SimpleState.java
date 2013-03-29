@@ -1,4 +1,4 @@
-package addax.primitive.string;
+package addax.simple;
 
 import addax.Context;
 import addax.State;
@@ -6,40 +6,50 @@ import addax.Transition;
 import addax.UnrecognizableInputException;
 import com.google.common.collect.Maps;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
 
 /**
+ * A string state with unique name.
+ *
  * @author Mamad
  * @version 1.0
  * @since 29/03/13
  */
-public class StringState implements State<String> {
+public class SimpleState implements State<String>, Serializable {
+    private static final long serialVersionUID = 1l;
+
     private Map<Transition<String>, State<String>> transitionsMap = Maps.newHashMap();
     private final String name;
 
-    public static StringState newState(String name) {
-        return new StringState(name);
+    public static SimpleState newState(String name) {
+        return new SimpleState(name);
     }
 
-    public StringState(String name) {
+    /**
+     * Create a new state with the given name
+     *
+     * @param name name should be unique.
+     */
+    public SimpleState(String name) {
         this.name = name;
     }
 
     @Override
-    public StringState skip(Transition<String> transition) {
+    public SimpleState skip(Transition<String> transition) {
         transitionsMap.put(transition, this);
         return this;
     }
 
     @Override
-    public StringState remove(Transition<String> transition) {
+    public SimpleState remove(Transition<String> transition) {
         transitionsMap.remove(transition);
         return this;
     }
 
     @Override
-    public StringState move(Transition<String> transition, State<String> target) {
+    public SimpleState move(Transition<String> transition, State<String> target) {
         transitionsMap.put(transition, target);
         return this;
     }
@@ -65,4 +75,20 @@ public class StringState implements State<String> {
         return name;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SimpleState that = (SimpleState) o;
+
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return name != null ? name.hashCode() : 0;
+    }
 }

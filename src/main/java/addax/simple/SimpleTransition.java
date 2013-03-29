@@ -1,4 +1,4 @@
-package addax.primitive.string;
+package addax.simple;
 
 import addax.Context;
 import addax.Transition;
@@ -8,6 +8,7 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.Sets;
 
 import javax.annotation.Nullable;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.regex.Pattern;
@@ -17,7 +18,9 @@ import java.util.regex.Pattern;
  * @version 1.0
  * @since 29/03/13
  */
-public class StringTransition implements Transition<String> {
+public class SimpleTransition implements Transition<String>, Serializable {
+    private static final long serialVersionUID = 1l;
+
     private static final Function<String, String> TO_LOWER = new Function<String, String>() {
         @Nullable
         @Override
@@ -25,7 +28,7 @@ public class StringTransition implements Transition<String> {
             return input != null ? input.toLowerCase() : null;
         }
     };
-    protected StringAction action;
+    protected SimpleAction action;
     protected Pattern pattern;
 
     @Override
@@ -39,15 +42,15 @@ public class StringTransition implements Transition<String> {
         return false;
     }
 
-    StringTransition(String regEx, boolean ignoreCase) {
+    public SimpleTransition(String regEx, boolean ignoreCase) {
         this(Pattern.compile(regEx, ignoreCase ? Pattern.CASE_INSENSITIVE : 0));
     }
 
-    StringTransition(Pattern pattern) {
+    public SimpleTransition(Pattern pattern) {
         this.pattern = pattern;
     }
 
-    public StringTransition action(StringAction action) {
+    public SimpleTransition action(SimpleAction action) {
         this.action = action;
         return this;
     }
@@ -55,9 +58,9 @@ public class StringTransition implements Transition<String> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || !(o instanceof StringTransition)) return false;
+        if (o == null || !(o instanceof SimpleTransition)) return false;
 
-        StringTransition that = (StringTransition) o;
+        SimpleTransition that = (SimpleTransition) o;
         return pattern.toString().equals(that.pattern.toString());
     }
 
@@ -71,16 +74,16 @@ public class StringTransition implements Transition<String> {
         return String.format("(%s)", pattern);
     }
 
-    public static StringTransition except(String... words) {
+    public static SimpleTransition except(String... words) {
         return new ExceptTransition(words);
     }
 
-    public static StringTransition anyOf(String... words) {
+    public static SimpleTransition anyOf(String... words) {
         return anyOf(Sets.newHashSet(words));
     }
 
-    public static StringTransition anyOf(Collection<String> words) {
-        return new StringTransition(makeRegEx(words, true), true);
+    public static SimpleTransition anyOf(Collection<String> words) {
+        return new SimpleTransition(makeRegEx(words, true), true);
     }
 
     protected static String makeRegEx(Collection<String> words, boolean ignoreCase) {
@@ -91,13 +94,15 @@ public class StringTransition implements Transition<String> {
         return pattern.matcher(word).find();
     }
 
-    public static StringTransition any() {
+    public static SimpleTransition any() {
         return new AnyTransition();
     }
 
-    private static class ExceptTransition extends StringTransition {
+    private static class ExceptTransition extends SimpleTransition {
+        private static final long serialVersionUID = 1l;
+
         public ExceptTransition(String... words) {
-            super(StringTransition.makeRegEx(Arrays.asList(words), true), true);
+            super(SimpleTransition.makeRegEx(Arrays.asList(words), true), true);
         }
 
         @Override
@@ -115,7 +120,7 @@ public class StringTransition implements Transition<String> {
             if (this == o) return true;
             if (o == null || !(o instanceof ExceptTransition)) return false;
 
-            StringTransition that = (StringTransition) o;
+            SimpleTransition that = (SimpleTransition) o;
             return pattern.toString().equals(that.pattern.toString());
         }
 
@@ -125,7 +130,9 @@ public class StringTransition implements Transition<String> {
         }
     }
 
-    private static class AnyTransition extends StringTransition {
+    private static class AnyTransition extends SimpleTransition {
+        private static final long serialVersionUID = 1l;
+
         public AnyTransition() {
             super(null);
         }

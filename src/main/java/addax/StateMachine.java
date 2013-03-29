@@ -1,7 +1,11 @@
 package addax;
 
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Iterator;
+import java.util.Set;
 
 /**
  * @author Mamad
@@ -19,7 +23,13 @@ public interface StateMachine<T> {
 
     StateMachine<T> read(Iterator<T> tokens) throws UnrecognizableInputException;
 
-    State<T> getState();
+    State<T> getStartState();
+
+    Set<State<T>> getAllStates();
 
     Context<T> getContext();
+
+    StateMachine<T> save(OutputStream out) throws IOException;
+
+    StateMachine<T> load(InputStream in) throws IOException;
 }
