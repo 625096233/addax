@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+    <info organisation="addax" module="Addax">
+        <license name="Apache License, Version 2.0"/>
+    </info>
+
+    <configurations defaultconf="dist"
+                    defaultconfmapping="dist->default,master(*),default(*),source(*);javadoc->javadoc(*);source->source(*)">
+        <conf name="dist" description="dist configuration"/>
+        <conf name="test" description="configuration used for testing" visibility="private"/>
+    </configurations>
+
+    <publications>
+    </publications>
+
+    <dependencies>
+        <dependency org="com.google.guava" name="guava" rev="14.0.1"/>
+        <dependency org="org.testng" name="testng" rev="6.7" conf="test->master, compile, runtime, provided"
+                    transitive="true"/>
+        <dependency org="org.mockito" name="mockito-all" transitive="true" rev="1.9.5" conf="test->master, runtime"/>
+
+    </dependencies>
+
+</ivy-module>
