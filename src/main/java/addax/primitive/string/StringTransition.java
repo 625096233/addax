@@ -75,7 +75,7 @@ public class StringTransition implements Transition<String> {
         return new ExceptTransition(words);
     }
 
-    public static Transition anyOf(String... words) {
+    public static StringTransition anyOf(String... words) {
         return anyOf(Sets.newHashSet(words));
     }
 
@@ -91,7 +91,7 @@ public class StringTransition implements Transition<String> {
         return pattern.matcher(word).find();
     }
 
-    public static Transition any() {
+    public static StringTransition any() {
         return new AnyTransition();
     }
 

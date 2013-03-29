@@ -10,7 +10,7 @@ import addax.Context;
  */
 public abstract class StringAction implements Action<String> {
     /**
-     * Pop a string from the context stack and prepend it to the current word
+     * Pop a string from the context stack and prepend it to the current token
      *
      * @return pop and prepend action
      */
@@ -39,6 +39,12 @@ public abstract class StringAction implements Action<String> {
         };
     }
 
+    /**
+     * Store the current token with the given key in the context
+     *
+     * @param key the key for storing current token
+     * @return this
+     */
     public static StringAction setAs(final String key) {
         return new StringAction() {
             @Override
@@ -49,6 +55,13 @@ public abstract class StringAction implements Action<String> {
         };
     }
 
+    /**
+     * Store the key value pair in the context
+     *
+     * @param key   the item key
+     * @param value the item value
+     * @return this
+     */
     public static StringAction set(String key, String value) {
         return new SetValueAction(key, value);
     }
