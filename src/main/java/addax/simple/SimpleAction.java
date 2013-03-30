@@ -19,13 +19,7 @@ public abstract class SimpleAction implements Action<String>, Serializable {
      * @return pop and prepend action
      */
     public static SimpleAction popAndPrepend(final String key) {
-        return new SimpleAction() {
-            @Override
-            public SimpleAction execute(String word, Context<String> context) {
-                context.set(key, context.pop() + " " + word);
-                return this;
-            }
-        };
+        return new PopAndPrependAction(key);
     }
 
     /**
@@ -34,13 +28,7 @@ public abstract class SimpleAction implements Action<String>, Serializable {
      * @return push action
      */
     public static SimpleAction push() {
-        return new SimpleAction() {
-            @Override
-            public SimpleAction execute(String word, Context<String> context) {
-                context.push(word);
-                return this;
-            }
-        };
+        return new PushAction();
     }
 
     /**
@@ -50,13 +38,7 @@ public abstract class SimpleAction implements Action<String>, Serializable {
      * @return this
      */
     public static SimpleAction setAs(final String key) {
-        return new SimpleAction() {
-            @Override
-            public SimpleAction execute(String word, Context<String> context) {
-                context.set(key, word);
-                return this;
-            }
-        };
+        return new SetAsAction(key);
     }
 
     /**
@@ -71,6 +53,7 @@ public abstract class SimpleAction implements Action<String>, Serializable {
     }
 
     private static class SetValueAction extends SimpleAction {
+        private static final long serialVersionUID = 1l;
         String key, value;
 
         private SetValueAction(String key, String value) {
@@ -85,4 +68,43 @@ public abstract class SimpleAction implements Action<String>, Serializable {
         }
     }
 
+    private static class PopAndPrependAction extends SimpleAction {
+        private static final long serialVersionUID = 1l;
+        private final String key;
+
+        public PopAndPrependAction(String key) {
+            this.key = key;
+        }
+
+        @Override
+        public SimpleAction execute(String word, Context<String> context) {
+            context.set(key, context.pop() + " " + word);
+            return this;
+        }
+    }
+
+    private static class PushAction extends SimpleAction {
+        private static final long serialVersionUID = 1l;
+
+        @Override
+        public SimpleAction execute(String word, Context<String> context) {
+            context.push(word);
+            return this;
+        }
+    }
+
+    private static class SetAsAction extends SimpleAction {
+        private static final long serialVersionUID = 1l;
+        private final String key;
+
+        public SetAsAction(String key) {
+            this.key = key;
+        }
+
+        @Override
+        public SimpleAction execute(String word, Context<String> context) {
+            context.set(key, word);
+            return this;
+        }
+    }
 }

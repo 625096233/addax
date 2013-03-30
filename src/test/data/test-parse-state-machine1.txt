@@ -1,0 +1,12 @@
+#input data in column, first is input token, second is associated action and last is the state
+#pi, restart after 10 secs
+!pi     skip                start
+pi      setAs=name          name-set
+restart action=reboot       action-set
+after   skip                when-p1
+10    push                  when-p1
+secs  pop-prep=when         when-set
+
+# $end is sign of end of sequence
+$end
+
