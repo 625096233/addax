@@ -1,9 +1,6 @@
 package addax.simple;
 
-import addax.Context;
-import addax.State;
-import addax.StateMachine;
-import addax.UnrecognizableInputException;
+import addax.*;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -135,6 +132,31 @@ public class SimpleStateMachine implements Context<String>, StateMachine<String>
         } catch (ClassNotFoundException e) {
             throw new IOException("Error in reading input stream.", e);
         }
+        return this;
+    }
+
+    /**
+     * Generate dot graph output for GraphViz
+     *
+     * @param writer writer to write the graph string into
+     * @return this
+     */
+    public StateMachine<String> writeDotGraph(Writer writer) throws IOException {
+        writer.write("digraph G {\n");
+        Set<State<String>> states = getAllStates();
+        for (State<String> state : states) {
+            Map<Transition<String>, State<String>> map = state.getTransitionsMap();
+            for (Map.Entry<Transition<String>, State<String>> entry : map.entrySet()) {
+                writer.write(state.toString().replaceAll("-", "_"));
+                writer.write(" -> ");
+                writer.write(entry.getValue().toString().replaceAll("-", "_"));
+                writer.write(" [label=\"");
+                writer.write(entry.getKey().toString());
+                writer.write("\"];\n");
+            }
+        }
+        writer.write("\n}");
+        writer.flush();
         return this;
     }
 }

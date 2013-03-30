@@ -4,6 +4,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.util.Map;
 
 /**
@@ -36,6 +37,12 @@ public class StateMachineFileParserTest {
         Assert.assertEquals(values.get("name"), "pi");
         Assert.assertEquals(values.get("action"), "reboot");
         Assert.assertEquals(values.get("when"), "10 secs");
+
+        File dotFile = new File("build/sm-graph.dot");
+        if (!dotFile.exists()) {
+            dotFile.createNewFile();
+        }
+        sm.writeDotGraph(new FileWriter(dotFile));
 
     }
 }
