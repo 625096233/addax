@@ -84,7 +84,7 @@ public class SimpleStateMachineTest {
             Assert.fail();
         }
 
-        Assert.assertNull(loaded.getStartState());
+        Assert.assertNotNull(loaded.getStartState());
         Assert.assertEquals(loaded.getAllStates(), sm.getAllStates());
     }
 }

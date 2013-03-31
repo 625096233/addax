@@ -24,13 +24,20 @@ public class RegExStringToActionMapperTest {
         Assert.assertEquals(mapped, set);
 
         mapper = new RegExStringToActionMapper();
-        mapper.register("((\\bactivity)|(\\baction))=sms", set);
+        mapper.register("(activity|action)=sms", set);
         mapped = mapper.apply("action=sms");
         Assert.assertNotNull(mapped);
         Assert.assertEquals(mapped, set);
         mapped = mapper.apply("activity=sms");
         Assert.assertNotNull(mapped);
         Assert.assertEquals(mapped, set);
+
+        try {
+            mapper.apply("act=sms");
+            Assert.fail("should throw exception");
+        } catch (Exception e) {
+            //ignore
+        }
 
     }
 }

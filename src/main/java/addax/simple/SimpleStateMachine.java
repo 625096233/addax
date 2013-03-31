@@ -88,7 +88,7 @@ public class SimpleStateMachine implements Context<String>, StateMachine<String>
     }
 
     public State<String> getStartState() {
-        return currentState;
+        return this.startState;
     }
 
     public SimpleStateMachine getContext() {
@@ -98,7 +98,7 @@ public class SimpleStateMachine implements Context<String>, StateMachine<String>
     @Override
     public Set<State<String>> getAllStates() {
         Set<State<String>> states = Sets.newHashSet();
-        addStates(startState, states);
+        addStates(this.startState, states);
         return states;
     }
 
@@ -128,7 +128,7 @@ public class SimpleStateMachine implements Context<String>, StateMachine<String>
             throw new IOException("Input stream is corrupted.");
         }
         try {
-            startState = (State<String>) ois.readObject();
+            this.startState = (State<String>) ois.readObject();
         } catch (ClassNotFoundException e) {
             throw new IOException("Error in reading input stream.", e);
         }

@@ -61,7 +61,22 @@
         </javac>
     </target>
 
-    <target name="jar" depends="compile" description="create jar file">
+    <target name="dist" depends="compile" description="create jar files for classes, source and javadoc">
         <jar basedir="${build.dir}/classes" destfile="${build.dir}/${ant.project.name}-${release.version}.jar"/>
+        <jar basedir="${main.src.dir}" destfile="${build.dir}/${ant.project.name}-${release.version}-sources.jar"/>
+        <javadoc
+                destdir="${build.dir}/javadoc"
+                author="true"
+                version="true"
+                use="true"
+                windowtitle="Addax - Simple State Machine API">
+
+            <packageset dir="${main.src.dir}" defaultexcludes="yes">
+                <include name="*/**"/>
+            </packageset>
+        </javadoc>
+        <jar basedir="${build.dir}/javadoc"
+             destfile="${build.dir}/${ant.project.name}-${release.version}-javadocs.jar"/>
+
     </target>
 </project>
