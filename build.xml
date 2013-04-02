@@ -76,7 +76,7 @@
             </packageset>
         </javadoc>
         <jar basedir="${build.dir}/javadoc"
-             destfile="${build.dir}/${ant.project.name}-${release.version}-javadocs.jar"/>
+             destfile="${build.dir}/${ant.project.name}-${release.version}-javadoc.jar"/>
 
     </target>
 </project>

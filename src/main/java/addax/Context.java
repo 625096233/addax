@@ -1,5 +1,7 @@
 package addax;
 
+import java.util.Map;
+
 /**
  * @author Mamad
  * @version 1.0
@@ -13,4 +15,6 @@ public interface Context<T> {
     Context<T> clear();
 
     T pop();
+
+    Map<T, T> getValues();
 }
