@@ -2,9 +2,11 @@ package addax.simple;
 
 import addax.Action;
 import addax.Context;
+import com.google.common.collect.Lists;
 
 import java.io.Serializable;
 import java.util.EmptyStackException;
+import java.util.List;
 
 /**
  * @author Mamad
@@ -71,7 +73,7 @@ public abstract class SimpleAction implements Action<String>, Serializable {
         return new SetValueAction(key, value);
     }
 
-    private static class SetValueAction extends SimpleAction {
+    public static class SetValueAction extends SimpleAction {
         private static final long serialVersionUID = 1l;
         String key, value;
 
@@ -104,6 +106,7 @@ public abstract class SimpleAction implements Action<String>, Serializable {
 
     public static class PopAllAction extends PopAction {
         private static final long serialVersionUID = 1l;
+
         public PopAllAction(String key) {
             super(key);
         }
@@ -120,7 +123,7 @@ public abstract class SimpleAction implements Action<String>, Serializable {
             }
 
             if (popStr.length() > 1) {
-                context.set(key, popStr.substring(0, popStr.length()-1));
+                context.set(key, popStr.substring(0, popStr.length() - 1));
             } else {
                 context.set(key, popStr);
             }
@@ -164,6 +167,27 @@ public abstract class SimpleAction implements Action<String>, Serializable {
         public SimpleAction execute(String word, Context<String> context) {
             context.set(key, word);
             return this;
+        }
+
+        public static class CompositeAction extends SimpleAction {
+            private static final long serialVersionUID = 1l;
+            private List<? extends Action<String>> actions;
+
+            public CompositeAction(Action<String>... actions) {
+                this(Lists.newArrayList(actions));
+            }
+
+            public CompositeAction(List<? extends Action<String>> actions) {
+                this.actions = actions;
+            }
+
+            @Override
+            public Action<String> execute(String input, Context<String> context) {
+                for (Action<String> action : actions) {
+                    action.execute(input, context);
+                }
+                return this;
+            }
         }
     }
 }

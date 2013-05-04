@@ -22,6 +22,7 @@ public class SimpleState implements State<String>, Serializable {
 
     private Map<Transition<String>, State<String>> transitionsMap = Maps.newHashMap();
     private final String name;
+    private boolean ignoreUnknownWords;
 
     public static SimpleState newState(String name) {
         return new SimpleState(name);
@@ -34,6 +35,10 @@ public class SimpleState implements State<String>, Serializable {
      */
     public SimpleState(String name) {
         this.name = name;
+    }
+
+    public void setIgnoreUnknownWords(boolean ignoreUnknownWords) {
+        this.ignoreUnknownWords = ignoreUnknownWords;
     }
 
     @Override
@@ -67,7 +72,11 @@ public class SimpleState implements State<String>, Serializable {
                 return entry.getValue();
             }
         }
-        throw new UnrecognizableInputException("Unrecognizable input token:" + word);
+        if (ignoreUnknownWords) {
+            return this;
+        } else {
+            throw new UnrecognizableInputException("Unrecognizable input token:" + word);
+        }
     }
 
     @Override
